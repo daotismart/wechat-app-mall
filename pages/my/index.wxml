@@ -36,6 +36,12 @@
   <view wx:if="{{userMobile}}" class="my-item" style="border:none;padding-right:150rpx;width:auto;">
     {{userMobile}}
   </view>
+  <view wx:if="{{!username}}" class="my-item" style="border:none;padding:0rpx;margin:0rpx;background:none;border:none;height:auto;line-height:auto;">
+    <button type="primary" bindtap="bingLogin">绑定用户</button>
+  </view>
+  <view wx:if="{{username}}" class="my-item" style="border:none;padding-right:150rpx;width:auto;">
+    用户 {{nickname}}
+  </view>
   <view style="height:20rpx;background: #eee;width:100%;"></view>
   <view class="about" bindtap="aboutUs">
     关于我们

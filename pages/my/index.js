@@ -81,7 +81,9 @@ Page({
           let _data = {}
           _data.apiUserInfoMap = res.data.data
           if (res.data.data.base.mobile) {
-            _data.userMobile = res.data.data.base.mobile
+            _data.userMobile = res.data.data.base.mobile;
+            _data.username = res.data.data.base.username;
+            _data.nickname = res.data.data.base.nickname;
           }
           that.setData(_data);
         }
@@ -158,6 +160,11 @@ Page({
   withdraw: function () {
     wx.navigateTo({
       url: "/pages/withdraw/index"
+    })
+  },
+  bingLogin: function () {
+    wx.navigateTo({
+      url: "/pages/bind-login/index"
     })
   }
 })
