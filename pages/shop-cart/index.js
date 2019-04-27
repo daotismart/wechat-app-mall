@@ -172,7 +172,7 @@ Page({
       var shopCarInfo = {};
       var tempNumber = 0;
       shopCarInfo.shopList = list;
-     shopCarInfo.total = total;
+      shopCarInfo.totalPrice = total;
       for(var i = 0;i<list.length;i++){
         tempNumber = tempNumber + list[i].number
       }

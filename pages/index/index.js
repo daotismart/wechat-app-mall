@@ -16,12 +16,13 @@ Page({
     goods:[],
     scrollTop:0,
     loadingMoreHidden:true,
+
     hasNoCoupons:true,
     coupons: [],
     searchInput: '',
+
     curPage:1,
     pageSize:20,
-    goodsDetail: {},
     shopCarInfo:{}
   },
 
@@ -34,7 +35,7 @@ Page({
       },
       success: function (res) {
         //有规格选择
-        if (true) {
+        if (res.data.data.properties && res.data.data.properties.length > 0) {
           e.currentTarget.dataset.hideShopPopup = false;
           that.toDetailsTap(e);
         } else {// 没有规格选择
@@ -47,7 +48,7 @@ Page({
           var shopCarInfo = that.bulidShopCarInfo(res.data.data);
 
           // 写入本地存储
-          var totalPrice = shopCarInfo.total + res.data.data.basicInfo.minPrice;
+          var totalPrice = shopCarInfo.totalPrice + res.data.data.basicInfo.minPrice;
           var totalScore = res.data.data.basicInfo.minScore;
           that.setData({
             totalPrice: res.total
