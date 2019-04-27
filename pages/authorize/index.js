@@ -124,6 +124,7 @@ Page({
             }
             wx.setStorageSync('token', res.data.data.token)
             wx.setStorageSync('uid', res.data.data.uid)
+            wx.setStorageSync('userid', res.data.data.info.base.userid)
             // 回到原来的地方放
             wx.navigateBack();
           }

@@ -209,7 +209,9 @@ Page({
       wx.request({
         url: app.globalData.subDomain + '/shop/goods/detail',
         data: {
-          id: carShopBean.goodsId
+          id: carShopBean.goodsId,
+          token: wx.getStorageSync('token'),
+          userid: wx.getStorageSync('userid')
         },
         success: function (res) {
           carShopBeanStores = res.data.data.basicInfo.stores;
@@ -305,7 +307,9 @@ Page({
           wx.request({
             url: app.globalData.subDomain +'/shop/goods/detail',
             data: {
-              id: carShopBean.goodsId
+              id: carShopBean.goodsId,
+              token: wx.getStorageSync('token'),
+              userid: wx.getStorageSync('userid')
             },
             success: function(res) {
               doneNumber++;
@@ -349,7 +353,9 @@ Page({
             url: app.globalData.subDomain +'/shop/goods/price',
             data: {
               goodsId: carShopBean.goodsId,
-              propertyChildIds:carShopBean.propertyChildIds
+              propertyChildIds:carShopBean.propertyChildIds,
+              token: wx.getStorageSync('token'),
+              userid: wx.getStorageSync('userid')
             },
             success: function(res) {
               doneNumber++;

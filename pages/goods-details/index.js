@@ -60,7 +60,9 @@ Page({
     wx.request({
       url: app.globalData.subDomain +'/shop/goods/detail',
       data: {
-        id: e.id
+        id: e.id,
+        token: wx.getStorageSync('token'),
+        userid: wx.getStorageSync('userid')
       },
       success: function(res) {
         var selectSizeTemp = "";
@@ -204,7 +206,9 @@ Page({
         url: app.globalData.subDomain +'/shop/goods/price',
         data: {
           goodsId: that.data.goodsDetail.basicInfo.id,
-          propertyChildIds:propertyChildIds
+          propertyChildIds:propertyChildIds,
+          token: wx.getStorageSync('token'),
+          userid: wx.getStorageSync('userid')
         },
         success: function(res) {
           that.setData({

@@ -29,7 +29,9 @@ Page({
     wx.request({
       url: app.globalData.subDomain +'/shop/goods/detail',
       data: {
-        id: that.data.id
+        id: that.data.id,
+        token: wx.getStorageSync('token'),
+        userid: wx.getStorageSync('userid')
       },
       success: function (res) {
         if (res.data.code == 0) {

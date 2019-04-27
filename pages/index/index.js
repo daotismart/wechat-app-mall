@@ -120,7 +120,9 @@ Page({
         categoryId: categoryId,
         nameLike: that.data.searchInput,
         page: this.data.curPage,
-        pageSize: this.data.pageSize
+        pageSize: this.data.pageSize,
+        token: wx.getStorageSync('token'),
+        userid: wx.getStorageSync('userid')
       },
       success: function(res) {
         wx.hideLoading()        
