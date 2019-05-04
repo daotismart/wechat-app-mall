@@ -375,6 +375,9 @@ Page({
     if (!shopCarInfo.shopNum) {
       shopCarInfo.shopNum = 0;
     }
+    if (!shopCarInfo.totalScore) {
+      shopCarInfo.totalScore = 0;
+    }
     if (!shopCarInfo.shopList) {
       shopCarInfo.shopList = [];
     }

@@ -64,9 +64,18 @@
            <view style='display:flex;'>
             <view class="goods-price">¥ {{item.minPrice}}</view>
             <view wx:if="{{item.originalPrice && item.originalPrice > 0}}" class="goods-price" style='color:#aaa;text-decoration:line-through'>¥ {{item.originalPrice}}</view>
-             <image src="/images/nav/cart-on.png" class="add-cart-btn" bindtap="toAddShopCar" data-id="{{item.id}}"/>
+             <addSubGoods goodsId="{{item.id}}" buyNum="{{item.buyNum}}" bind:totalPriceChange='onTotalPriceChange'></addSubGoods>
         </view>  
         </view>
     </view>
     <view hidden="{{loadingMoreHidden ? true : false}}" class="no-more-goods">没有更多啦</view>
+    <view class="jiesuan-box" hidden="{{hideSummaryPopup}}">
+  <view class="left-price">
+    <view class="shop-num">({{shopNum}})</view>
+    <image src="/images/cart/totalCart.png" class="cart-btn" bindtap="navigateToCartShop" />
+    <view class="total">¥ {{totalPrice}} + {{totalScore}} 积分</view>
+  </view>
+  <view class="to-pay-btn" bindtap="navigateToPayOrder">去结算</view>
 </view>
+</view>
+
