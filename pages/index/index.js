@@ -23,7 +23,6 @@ Page({
 
     curPage:1,
     pageSize:20,
-    shopCarInfo:{},
     hideSummaryPopup: true,
     totalPrice: 0,
     totalScore: 0
@@ -43,9 +42,10 @@ Page({
         swiperCurrent: e.detail.current  
     })  
   },
-  toDetailsTap: function (e){
+  toDetailsTap: function (e) {
     wx.navigateTo({
       url: "/pages/goods-details/index?id=" + e.currentTarget.dataset.id + "&hideShopPopup=" + e.currentTarget.dataset.hideShopPopup
+
     })
   },
   tapBanner: function(e) {
@@ -153,7 +153,7 @@ Page({
           goods = that.data.goods
         }        
         for(var i=0;i<res.data.data.length;i++){
-          res.data.data[i].buyNum = that.getGoodsNumInshopCard(res.data.data[i].id);
+          res.data.data[i].buyNum = that.getGoodsNumInShopCard(res.data.data[i].id);
           goods.push(res.data.data[i]);
         }
         that.setData({
@@ -164,7 +164,7 @@ Page({
     })
   },
 
-  getGoodsNumInshopCard: function (goodsId) {
+  getGoodsNumInShopCard: function (goodsId) {
     var shopCarInfo = wx.getStorageSync('shopCarInfo');
     if (shopCarInfo.shopList.length > 0) {
       for (var i = 0; i < shopCarInfo.shopList.length; i++) {
