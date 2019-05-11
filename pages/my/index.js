@@ -1,8 +1,9 @@
 const app = getApp()
-
+const CONFIG = require('../../config.js')
+const WXAPI = require('../../wxapi/main')
 Page({
 	data: {
-    balance:0,
+    balance:0.00,
     freeze:0,
     score:0,
     score_sign_continuous:0
@@ -14,18 +15,15 @@ Page({
     let that = this;
     let userInfo = wx.getStorageSync('userInfo')
     if (!userInfo) {
-      wx.navigateTo({
-        url: "/pages/authorize/index"
-      })
+      app.goLoginPageTimeOut()
     } else {
       that.setData({
         userInfo: userInfo,
-        version: app.globalData.version
+        version: CONFIG.version
       })
     }
     this.getUserApiInfo();
     this.getUserAmount();
-    this.checkScoreSign();
   },
   aboutUs : function () {
     wx.showModal({
@@ -44,127 +42,68 @@ Page({
       return;
     }
     var that = this;
-    wx.request({
-      url: app.globalData.subDomain + '/user/wxapp/bindMobile',
-      data: {
-        token: wx.getStorageSync('token'),
-        encryptedData: e.detail.encryptedData,
-        iv: e.detail.iv
-      },
-      success: function (res) {
-        if (res.data.code == 0) {
-          wx.showToast({
-            title: '绑定成功',
-            icon: 'success',
-            duration: 2000
-          })
-          that.getUserApiInfo();
-        } else {
-          wx.showModal({
-            title: '提示',
-            content: '绑定失败',
-            showCancel: false
-          })
-        }
+    WXAPI.bindMobile({
+      token: wx.getStorageSync('token'),
+      encryptedData: e.detail.encryptedData,
+      iv: e.detail.iv
+    }).then(function (res) {
+      if (res.code == 0) {
+        wx.showToast({
+          title: '绑定成功',
+          icon: 'success',
+          duration: 2000
+        })
+        that.getUserApiInfo();
+      } else {
+        wx.showModal({
+          title: '提示',
+          content: '绑定失败',
+          showCancel: false
+        })
       }
     })
   },
   getUserApiInfo: function () {
     var that = this;
-    wx.request({
-      url: app.globalData.subDomain + '/user/detail',
-      data: {
-        token: wx.getStorageSync('token')
-      },
-      success: function (res) {
-        if (res.data.code == 0) {
-          let _data = {}
-          _data.apiUserInfoMap = res.data.data
-          if (res.data.data.base.mobile) {
-            _data.userMobile = res.data.data.base.mobile;
-            _data.username = res.data.data.base.username;
-            _data.nickname = res.data.data.base.nickname;
-          }
-          that.setData(_data);
+    WXAPI.userDetail(wx.getStorageSync('token')).then(function (res) {
+      if (res.code == 0) {
+        let _data = {}
+        _data.apiUserInfoMap = res.data
+        if (res.data.base.mobile) {
+          _data.userMobile = res.data.base.mobile
         }
+        that.setData(_data);
       }
     })
-
   },
   getUserAmount: function () {
     var that = this;
-    wx.request({
-      url: app.globalData.subDomain + '/user/amount',
-      data: {
-        token: wx.getStorageSync('token')
-      },
-      success: function (res) {
-        if (res.data.code == 0) {
-          that.setData({
-            balance: res.data.data.balance,
-            freeze: res.data.data.freeze,
-            score: res.data.data.score
-          });
-        }
-      }
-    })
-
-  },
-  checkScoreSign: function () {
-    var that = this;
-    wx.request({
-      url: app.globalData.subDomain + '/score/today-signed',
-      data: {
-        token: wx.getStorageSync('token')
-      },
-      success: function (res) {
-        if (res.data.code == 0) {
-          that.setData({
-            score_sign_continuous: res.data.data.continuous
-          });
-        }
-      }
-    })
-  },
-  scoresign: function () {
-    var that = this;
-    wx.request({
-      url: app.globalData.subDomain + '/score/sign',
-      data: {
-        token: wx.getStorageSync('token')
-      },
-      success: function (res) {
-        if (res.data.code == 0) {
-          that.getUserAmount();
-          that.checkScoreSign();
-        } else {
-          wx.showModal({
-            title: '错误',
-            content: res.data.msg,
-            showCancel: false
-          })
-        }
+    WXAPI.userAmount(wx.getStorageSync('token')).then(function (res) {
+      if (res.code == 0) {
+        that.setData({
+          balance: res.data.balance.toFixed(2),
+          freeze: res.data.freeze.toFixed(2),
+          score: res.data.score
+        });
       }
     })
   },
   relogin:function(){
+    app.goLoginPageTimeOut()
+  },
+  goAsset: function () {
     wx.navigateTo({
-      url: "/pages/authorize/index"
+      url: "/pages/asset/index"
     })
   },
-  recharge: function () {
+  goScore: function () {
     wx.navigateTo({
-      url: "/pages/recharge/index"
+      url: "/pages/score/index"
     })
   },
-  withdraw: function () {
+  goOrder: function (e) {
     wx.navigateTo({
-      url: "/pages/withdraw/index"
-    })
-  },
-  bingLogin: function () {
-    wx.navigateTo({
-      url: "/pages/bind-login/index"
+      url: "/pages/order-list/index?type=" + e.currentTarget.dataset.type
     })
   }
 })

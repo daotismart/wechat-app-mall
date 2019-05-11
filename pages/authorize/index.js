@@ -1,4 +1,4 @@
-// pages/authorize/index.js
+const WXAPI = require('../../wxapi/main')
 var app = getApp();
 Page({
 
@@ -6,66 +6,66 @@ Page({
    * 页面的初始数据
    */
   data: {
-  
+
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
-  
+  onLoad: function(options) {
+
   },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function () {
-  
+  onReady: function() {
+
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {
-  
+  onShow: function() {
+
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function () {
-  
+  onHide: function() {
+
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function () {
-  
+  onUnload: function() {
+
   },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function () {
-  
+  onPullDownRefresh: function() {
+
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function () {
-  
+  onReachBottom: function() {
+
   },
 
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {
-  
+  onShareAppMessage: function() {
+
   },
-  bindGetUserInfo: function (e) {
-    if (!e.detail.userInfo){
+  bindGetUserInfo: function(e) {
+    if (!e.detail.userInfo) {
       return;
     }
     if (app.globalData.isConnected) {
@@ -78,67 +78,56 @@ Page({
       })
     }
   },
-  login: function () {
-    let that = this;
-    let token = wx.getStorageSync('token');
+  login: function() {
+    const that = this;
+    const token = wx.getStorageSync('token');
     if (token) {
-      wx.request({
-        url: app.globalData.subDomain + '/user/check-token',
-        data: {
-          token: token
-        },
-        success: function (res) {
-          if (res.data.code != 0) {
-            wx.removeStorageSync('token')
-            that.login();
-          } else {
-            // 回到原来的地方放
-            wx.navigateBack();
-          }
+      WXAPI.checkToken(token).then(function(res) {
+        if (res.code != 0) {
+          wx.removeStorageSync('token')
+          that.login();
+        } else {
+          // 回到原来的地方放
+          app.navigateToLogin = false
+          wx.navigateBack();
         }
       })
       return;
     }
     wx.login({
-      success: function (res) {
-        wx.request({
-          url: app.globalData.subDomain + '/user/wxapp/login',
-          data: {
-            code: res.code
-          },
-          success: function (res) {
-            if (res.data.code == 10000) {
-              // 去注册
-              that.registerUser();
-              return;
-            }
-            if (res.data.code != 0) {
-              // 登录错误
-              wx.hideLoading();
-              wx.showModal({
-                title: '提示',
-                content: '无法登录，请重试',
-                showCancel: false
-              })
-              return;
-            }
-            wx.setStorageSync('token', res.data.data.token)
-            wx.setStorageSync('uid', res.data.data.uid)
-            wx.setStorageSync('userid', res.data.data.info.base.userid)
-            // 回到原来的地方放
-            wx.navigateBack();
+      success: function(res) {
+        WXAPI.login(res.code).then(function(res) {
+          if (res.code == 10000) {
+            // 去注册
+            that.registerUser();
+            return;
           }
+          if (res.code != 0) {
+            // 登录错误
+            wx.hideLoading();
+            wx.showModal({
+              title: '提示',
+              content: '无法登录，请重试',
+              showCancel: false
+            })
+            return;
+          }
+          wx.setStorageSync('token', res.data.token)
+          wx.setStorageSync('uid', res.data.uid)
+          // 回到原来的地方放
+          app.navigateToLogin = false
+          wx.navigateBack();
         })
       }
     })
   },
-  registerUser: function () {
+  registerUser: function() {
     let that = this;
     wx.login({
-      success: function (res) {
+      success: function(res) {
         let code = res.code; // 微信登录接口返回的 code 参数，下面注册接口需要用到
         wx.getUserInfo({
-          success: function (res) {
+          success: function(res) {
             let iv = res.iv;
             let encryptedData = res.encryptedData;
             let referrer = '' // 推荐人
@@ -147,13 +136,14 @@ Page({
               referrer = referrer_storge;
             }
             // 下面开始调用注册接口
-            wx.request({
-              url: app.globalData.subDomain + '/user/wxapp/register/complex',
-              data: { code: code, encryptedData: encryptedData, iv: iv, referrer: referrer }, // 设置请求的 参数
-              success: (res) => {
-                wx.hideLoading();
-                that.login();
-              }
+            WXAPI.register( {
+              code: code,
+              encryptedData: encryptedData,
+              iv: iv,
+              referrer: referrer
+            }).then(function(res) {
+              wx.hideLoading();
+              that.login();
             })
           }
         })

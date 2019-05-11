@@ -1,4 +1,5 @@
-var commonCityData = require('../../utils/city.js')
+const commonCityData = require('../../utils/city.js')
+const WXAPI = require('../../wxapi/main')
 //获取应用实例
 var app = getApp()
 Page({
@@ -78,41 +79,46 @@ Page({
       })
       return
     }
-    var apiAddoRuPDATE = "add";
-    var apiAddid = that.data.id;
-    if (apiAddid) {
-      apiAddoRuPDATE = "update";
-    } else {
-      apiAddid = 0;
-    }
-    wx.request({
-      url: app.globalData.subDomain + '/user/shipping-address/' + apiAddoRuPDATE,
-      data: {
+    let apiResult
+    if (that.data.id) {
+      apiResult = WXAPI.updateAddress({
         token: wx.getStorageSync('token'),
-        id: apiAddid,
+        id: that.data.id,
         provinceId: commonCityData.cityData[this.data.selProvinceIndex].id,
         cityId: cityId,
         districtId: districtId,
-        linkMan:linkMan,
-        address:address,
-        mobile:mobile,
-        code:code,
-        isDefault:'true'
-      },
-      success: function(res) {
-        if (res.data.code != 0) {
-          // 登录错误 
-          wx.hideLoading();
-          wx.showModal({
-            title: '失败',
-            content: res.data.msg,
-            showCancel:false
-          })
-          return;
-        }
-        // 跳转到结算页面
-        wx.navigateBack({})
+        linkMan: linkMan,
+        address: address,
+        mobile: mobile,
+        code: code,
+        isDefault: 'true'
+      })
+    } else {
+      apiResult = WXAPI.addAddress({
+        token: wx.getStorageSync('token'),
+        provinceId: commonCityData.cityData[this.data.selProvinceIndex].id,
+        cityId: cityId,
+        districtId: districtId,
+        linkMan: linkMan,
+        address: address,
+        mobile: mobile,
+        code: code,
+        isDefault: 'true'
+      })
+    }
+    apiResult.then(function (res) {
+      if (res.code != 0) {
+        // 登录错误 
+        wx.hideLoading();
+        wx.showModal({
+          title: '失败',
+          content: res.msg,
+          showCancel: false
+        })
+        return;
       }
+      // 跳转到结算页面
+      wx.navigateBack({})
     })
   },
   initCityData:function(level, obj){
@@ -182,32 +188,23 @@ Page({
     var id = e.id;
     if (id) {
       // 初始化原数据
-      wx.showLoading();
-      wx.request({
-        url: app.globalData.subDomain + '/user/shipping-address/detail',
-        data: {
-          token: wx.getStorageSync('token'),
-          id: id
-        },
-        success: function (res) {
-          wx.hideLoading();
-          if (res.data.code == 0) {
-            that.setData({
-              id:id,
-              addressData: res.data.data,
-              selProvince: res.data.data.provinceStr,
-              selCity: res.data.data.cityStr,
-              selDistrict: res.data.data.areaStr
-              });
-            that.setDBSaveAddressId(res.data.data);
-            return;
-          } else {
-            wx.showModal({
-              title: '提示',
-              content: '无法获取快递地址数据',
-              showCancel: false
-            })
-          }
+      WXAPI.addressDetail(id, wx.getStorageSync('token')).then(function (res) {
+        if (res.code == 0) {
+          that.setData({
+            id: id,
+            addressData: res.data,
+            selProvince: res.data.provinceStr,
+            selCity: res.data.cityStr,
+            selDistrict: res.data.areaStr
+          });
+          that.setDBSaveAddressId(res.data);
+          return;
+        } else {
+          wx.showModal({
+            title: '提示',
+            content: '无法获取快递地址数据',
+            showCancel: false
+          })
         }
       })
     }
@@ -241,17 +238,10 @@ Page({
       content: '确定要删除该收货地址吗？',
       success: function (res) {
         if (res.confirm) {
-          wx.request({
-            url: app.globalData.subDomain + '/user/shipping-address/delete',
-            data: {
-              token: wx.getStorageSync('token'),
-              id: id
-            },
-            success: (res) => {
-              wx.navigateBack({})
-            }
+          WXAPI.deleteAddress(id, wx.getStorageSync('token')).then(function () {
+            wx.navigateBack({})
           })
-        } else if (res.cancel) {
+        } else {
           console.log('用户点击取消')
         }
       }
