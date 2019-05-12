@@ -1,0 +1,15 @@
+<view style='display:flex;'>
+  <view wx:if="{{buyNum === 0}}">
+    <image src="/images/cart/addGoods.png" class="add-cart-btn" bindtap="tapAddGoods" />
+  </view>
+  <block wx:elif="{{buyNum === goodsStore}}">
+    <image src="/images/cart/subGoods.png" class="add-cart-btn" bindtap="subGoods" />
+    <view class="buy-num">{{buyNum}}</view>
+    <image src="/images/cart/addDisabled.png" class="add-cart-btn" />
+  </block>
+  <block wx:else>
+    <image src="/images/cart/subGoods.png" class="add-cart-btn" bindtap="subGoods" />
+    <view class="buy-num">{{buyNum}}</view>
+    <image src="/images/cart/addGoods.png" class="add-cart-btn" bindtap="tapAddGoods" />
+  </block>
+</view>
