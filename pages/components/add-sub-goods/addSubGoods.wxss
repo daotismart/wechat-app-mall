@@ -1,0 +1,21 @@
+.add-cart-btn {
+  position: relative;
+  max-width: 40rpx;
+  max-height: 40rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-sizing: border-box;
+  margin: 6px 10rpx;
+}
+
+.buy-num {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  box-sizing: border-box;
+  font-size: 24rpx;
+  line-height: 84rpx;
+}
+

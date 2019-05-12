@@ -88,6 +88,12 @@ Page({
     })
     this.reputation(e.id);
     this.getKanjiaInfo(e.id);
+    if (e.hideShopPopup === "false"){
+      this.setData({
+        shopType: "addShopCar",
+        hideShopPopup: false
+      })
+    }
   },
   goShopCar: function() {
     wx.reLaunch({
@@ -351,6 +357,9 @@ Page({
     var shopCarInfo = this.data.shopCarInfo;
     if (!shopCarInfo.shopNum) {
       shopCarInfo.shopNum = 0;
+    }
+    if (!shopCarInfo.totalScore) {
+      shopCarInfo.totalScore = 0;
     }
     if (!shopCarInfo.shopList) {
       shopCarInfo.shopList = [];
