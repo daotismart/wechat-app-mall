@@ -172,6 +172,8 @@ Page({
     var shopCarInfo = {};
     var tempNumber = 0;
     shopCarInfo.shopList = list;
+    shopCarInfo.totalScore = this.data.goodsList.totalScoreToPay; 
+    shopCarInfo.totalPrice = total; 
     for (var i = 0; i < list.length; i++) {
       tempNumber = tempNumber + list[i].number
     }
@@ -261,6 +263,11 @@ Page({
     // above codes that remove elements in a for statement may change the length of list dynamically
     list = list.filter(function(curGoods) {
       return !curGoods.active;
+    });
+    this.setData({
+      goodsList: {
+        list: list
+      }
     });
     this.setGoodsList(this.getSaveHide(), this.totalPrice(), this.allSelect(), this.noSelect(), list);
   },

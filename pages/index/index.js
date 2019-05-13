@@ -23,7 +23,10 @@ Page({
     searchInput: '',
 
     curPage: 1,
-    pageSize: 20
+    pageSize: 20,
+    hideSummaryPopup: true,
+    totalPrice: 0,
+    totalScore: 0
   },
 
   tabClick: function(e) {
@@ -42,7 +45,7 @@ Page({
   },
   toDetailsTap: function(e) {
     wx.navigateTo({
-      url: "/pages/goods-details/index?id=" + e.currentTarget.dataset.id
+      url: "/pages/goods-details/index?id=" + e.currentTarget.dataset.id + "&hideShopPopup=" + e.currentTarget.dataset.hideShopPopup
     })
   },
   tapBanner: function(e) {
@@ -62,6 +65,19 @@ Page({
     wx.setNavigationBarTitle({
       title: wx.getStorageSync('mallName')
     })
+
+    var shopCarInfo = wx.getStorageSync('shopCarInfo');
+    var hideSummaryPopup = true;
+    if (shopCarInfo.shopList.length > 0) {
+      hideSummaryPopup = false;
+    }
+    that.setData({
+      hideSummaryPopup: hideSummaryPopup,
+      totalPrice: shopCarInfo.totalPrice,
+      totalScore: shopCarInfo.totalScore,
+      shopNum: shopCarInfo.shopNum
+    });
+
     /**
      * 示例：
      * 调用接口封装方法
@@ -142,6 +158,7 @@ Page({
         goods = that.data.goods
       }
       for (var i = 0; i < res.data.length; i++) {
+        res.data[i].buyNum = that.getGoodsNumInShopCard(res.data[i].id);
         goods.push(res.data[i]);
       }
       that.setData({
@@ -149,6 +166,18 @@ Page({
         goods: goods,
       });
     })
+  },
+  getGoodsNumInShopCard: function (goodsId) {
+    var shopCarInfo = wx.getStorageSync('shopCarInfo');
+    if (shopCarInfo.shopList.length > 0) {
+      for (var i = 0; i < shopCarInfo.shopList.length; i++) {
+        var tmpShopCarMap = shopCarInfo.shopList[i];
+        if (tmpShopCarMap.goodsId == goodsId) {
+          return tmpShopCarMap.number;
+        }
+      }
+    }
+    return 0;
   },
   getCoupons: function() {
     var that = this;
@@ -259,6 +288,36 @@ Page({
       curPage: this.data.curPage + 1
     });
     this.getGoodsList(this.data.activeCategoryId, true)
+  },
+  onTotalPriceChange: function (e) {
+    let hideSummaryPopup = true;
+    if (e.detail.totalPrice > 0) {
+      hideSummaryPopup = false;
+    }
+    this.setData({
+      hideSummaryPopup: hideSummaryPopup,
+      totalPrice: e.detail.totalPrice,
+      totalScore: e.detail.totalScore,
+      shopNum: e.detail.shopNum
+    });
+
+  },
+  navigateToPayOrder: function () {
+    wx.hideLoading();
+    wx.navigateTo({
+      url: "/pages/to-pay-order/index"
+    })
+  },
+
+  navigateToCartShop: function () {
+    wx.hideLoading();
+    wx.switchTab({
+      url: "/pages/shop-cart/index"
+    })
+  },
+
+  onShow: function () {
+    this.onLoad();
   },
   onPullDownRefresh: function() {
     this.setData({
