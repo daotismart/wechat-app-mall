@@ -70,7 +70,9 @@ Page({
         let _data = {}
         _data.apiUserInfoMap = res.data
         if (res.data.base.mobile) {
-          _data.userMobile = res.data.base.mobile;
+          _data.userMobile = res.data.base.mobile
+        }
+        if (res.data.base.username) {
           _data.username = res.data.base.username;
           _data.nickname = res.data.base.nickname;
         }
