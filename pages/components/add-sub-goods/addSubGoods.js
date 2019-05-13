@@ -1,3 +1,4 @@
+const WXAPI = require('../../../wxapi/main')
 var app = getApp();
 Component({
   properties: {
@@ -29,36 +30,30 @@ Component({
       var buyNum = that.data.buyNum + 1;
       var stores = that.data.goodsStore;
       var goodsId = that.properties.goodsId;
-      wx.request({
-        url: app.globalData.subDomain + '/shop/goods/detail',
-        data: {
-          id: goodsId
-        },
-        success: function(res) {
-          //有规格选择
-          if (res.data.data.properties && res.data.data.properties.length > 0) {
-            //that.getGoodsStore(goodsId);
-            that.toDetailsTap(goodsId, false);
-          } else { // 没有规格选择
-            stores = res.data.data.basicInfo.stores;
-            that.setData({
-              goodsStore: stores
-            });
+      WXAPI.goodsDetail(goodsId).then(function (res) {
+        //有规格选择
+        if (res.data.properties && res.data.properties.length > 0) {
+          //that.getGoodsStore(goodsId);
+          that.toDetailsTap(goodsId, false);
+        } else { // 没有规格选择
+          stores = res.data.basicInfo.stores;
+          that.setData({
+            goodsStore: stores
+          });
 
-            if (buyNum > stores) {
-              wx.showModal({
-                title: '提示',
-                content: res.data.data.basicInfo.name + ' 库存不足，请重新购买',
-                showCancel: false,
-                duration: 200
-              });
-              return;
-            }
-            //更新购物车信息
-            that.updateShopCarInfo(res.data.data);
+          if (buyNum > stores) {
+            wx.showModal({
+              title: '提示',
+              content: res.data.basicInfo.name + ' 库存不足，请重新购买',
+              showCancel: false,
+              duration: 200
+            });
+            return;
           }
+          //更新购物车信息
+          that.updateShopCarInfo(res.data);
         }
-      })
+      });
     },
 
     toDetailsTap: function(goodsId, hideShopPopup) {
@@ -142,7 +137,7 @@ Component({
       var hasSameGoodsIndex = -1;
       for (var i = 0; i < shopList.length; i++) {
         var tmpShopCarMap = shopList[i];
-        if (tmpShopCarMap.goodsId == shopCarMap.goodsId && tmpShopCarMap.propertyChildIds == shopCarMap.propertyChildIds) {
+        if (tmpShopCarMap.goodsId == shopCarMap.goodsId && (!tmpShopCarMap.propertyChildIds ||tmpShopCarMap.propertyChildIds == shopCarMap.propertyChildIds)){
           hasSameGoodsIndex = i;
           shopCarMap.number = shopCarMap.number + tmpShopCarMap.number;
           break;
