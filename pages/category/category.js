@@ -13,6 +13,9 @@ Page({
     categorySelected: "",
     goodsToView: "",
     categoryToView: "",
+    hideSummaryPopup: true,
+    totalPrice: 0,
+    totalScore: 0
   },
 
   /**
@@ -26,6 +29,19 @@ Page({
 
     let that = this;
     wx.showNavigationBarLoading();
+
+    var shopCarInfo = wx.getStorageSync('shopCarInfo');
+    var hideSummaryPopup = true;
+    if (shopCarInfo.shopList.length > 0) {
+      hideSummaryPopup = false;
+    }
+    that.setData({
+      hideSummaryPopup: hideSummaryPopup,
+      totalPrice: shopCarInfo.totalPrice,
+      totalScore: shopCarInfo.totalScore,
+      shopNum: shopCarInfo.shopNum
+    });
+
     WXAPI.goodsCategory().then(function(res) {
 
       var categories = [];
@@ -83,10 +99,11 @@ Page({
         let goods = [];
 
         wrap.goods = goods;
+
         res.data.forEach((item, i) => {
 
           if (item.categoryId == wrap.id) {
-
+            item.buyNum = that.getGoodsNumInShopCard(res.data[i].id);
             goods.push(item)
           }
         })
@@ -97,6 +114,7 @@ Page({
 
 
       that.setData({
+        loadingMoreHidden: true,
         goodsWrap: goodsWrap,
       });
 
@@ -182,5 +200,35 @@ Page({
     }
 
   
-  }
+  },
+
+  onTotalPriceChange: function (e) {
+    let hideSummaryPopup = true;
+    if (e.detail.totalPrice > 0) {
+      hideSummaryPopup = false;
+    }
+    this.setData({
+      hideSummaryPopup: hideSummaryPopup,
+      totalPrice: e.detail.totalPrice,
+      totalScore: e.detail.totalScore,
+      shopNum: e.detail.shopNum
+    });
+
+  },
+  getGoodsNumInShopCard: function (goodsId) {
+    var shopCarInfo = wx.getStorageSync('shopCarInfo');
+    if (shopCarInfo.shopList.length > 0) {
+      for (var i = 0; i < shopCarInfo.shopList.length; i++) {
+        var tmpShopCarMap = shopCarInfo.shopList[i];
+        if (tmpShopCarMap.goodsId == goodsId) {
+          return tmpShopCarMap.number;
+        }
+      }
+    }
+    return 0;
+  },
+
+  onShow: function () {
+    this.onLoad();
+  },
 })

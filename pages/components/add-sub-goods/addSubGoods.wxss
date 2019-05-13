@@ -16,6 +16,5 @@
   text-align: center;
   box-sizing: border-box;
   font-size: 24rpx;
-  line-height: 84rpx;
 }
 
