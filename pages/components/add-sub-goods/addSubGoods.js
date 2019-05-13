@@ -137,7 +137,7 @@ Component({
       var hasSameGoodsIndex = -1;
       for (var i = 0; i < shopList.length; i++) {
         var tmpShopCarMap = shopList[i];
-        if (tmpShopCarMap.goodsId == shopCarMap.goodsId && tmpShopCarMap.propertyChildIds == shopCarMap.propertyChildIds) {
+        if (tmpShopCarMap.goodsId == shopCarMap.goodsId && (!tmpShopCarMap.propertyChildIds ||tmpShopCarMap.propertyChildIds == shopCarMap.propertyChildIds)){
           hasSameGoodsIndex = i;
           shopCarMap.number = shopCarMap.number + tmpShopCarMap.number;
           break;
