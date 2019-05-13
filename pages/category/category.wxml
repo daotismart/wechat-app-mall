@@ -6,7 +6,7 @@
     <block wx:for="{{categories}}" wx:key="id">
 
       <view class="category-item {{categorySelected==item.scrollId?'category-item-active':''}}" data-id='{{item.scrollId}}' id='{{item.scrollId}}' bindtap='onCategoryClick'>
-        <text>{{item.name}}</text>
+        <text style="font-size: 12px; color: gray">{{item.name}}</text>
       </view>
 
     </block>
@@ -17,7 +17,7 @@
     <block wx:for="{{goodsWrap}}" wx:key="id">
 
       <view class="goodsWrap-category" id='{{item.scrollId}}'>
-        <text>{{item.name}}</text>
+        <text style="font-size: 12px">{{item.name}}</text>
       </view>
 
       <block wx:for="{{item.goods}}" wx:for-item="goods" wx:key="id">

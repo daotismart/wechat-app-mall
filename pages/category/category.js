@@ -91,7 +91,7 @@ Page({
           }
         })
 
-        goodsWrap.push(wrap);
+        if(wrap.goods.length>0)goodsWrap.push(wrap);
       })
 
 
