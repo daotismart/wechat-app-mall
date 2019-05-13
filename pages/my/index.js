@@ -72,6 +72,10 @@ Page({
         if (res.data.base.mobile) {
           _data.userMobile = res.data.base.mobile
         }
+        if (res.data.base.username) {
+          _data.username = res.data.base.username;
+          _data.nickname = res.data.base.nickname;
+        }
         that.setData(_data);
       }
     })
@@ -90,6 +94,11 @@ Page({
   },
   relogin:function(){
     app.goLoginPageTimeOut()
+  },
+  bingLogin: function () {
+    wx.navigateTo({
+      url: "/pages/bind-login/index"
+    })
   },
   goAsset: function () {
     wx.navigateTo({

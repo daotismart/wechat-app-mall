@@ -135,6 +135,19 @@ Page({
             if (referrer_storge) {
               referrer = referrer_storge;
             }
+            if (0) {
+              var registerData = {
+                code: code,
+                encryptedData: encryptedData,
+                iv: iv,
+                referrer: referrer
+              }
+              wx.setStorageSync('registerData', registerData)
+              wx.navigateTo({
+                url: "/pages/bind-login/index"
+              })
+              return;
+            }
             // 下面开始调用注册接口
             WXAPI.register( {
               code: code,

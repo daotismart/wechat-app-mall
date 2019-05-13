@@ -1,5 +1,6 @@
 // pages/bind-login/index.js
 var app = getApp()
+const WXAPI = require('../../wxapi/main')
 Page({
 
   /**
@@ -68,6 +69,52 @@ Page({
   bindCancel: function () {
     wx.navigateBack({})
   },
+  register_and_bind: function (registerData) {
+    // 下面开始调用注册接口
+    wx.showLoading();
+    WXAPI.register(registerData).then(function (res) {
+      wx.hideLoading();
+      wx.removeStorageSync('registerData');
+      if (res.code != 0) {
+        var title = res.code == -2 ? '提示' : '错误';
+        wx.showModal({
+          title: title,
+          content: res.msg,
+          showCancel: false,
+          success(res) {
+            if (res.confirm) {
+              wx.navigateBack({});
+            }
+          }
+        })
+        return;
+      }else{
+        // 成功注册并绑定后自动执行登录请求
+        wx.login({
+          success: function (res) {
+            wx.showLoading();
+            WXAPI.login(res.code).then(function (res) {
+              if (res.code != 0) {
+                // 登录错误
+                wx.hideLoading();
+                wx.showModal({
+                  title: '提示',
+                  content: '无法登录，请重试',
+                  showCancel: false
+                })
+                return;
+              }
+              wx.setStorageSync('token', res.data.token)
+              wx.setStorageSync('uid', res.data.uid)
+              // 回到原来的地方放
+              app.navigateToLogin = false
+              wx.navigateBack({ delta: 2 });
+            })
+          }
+        })
+      }
+    })
+  },
   bindSave: function (e) {
     var that = this;
     
@@ -90,31 +137,30 @@ Page({
       password: password
     }
 
+    let registerData = wx.getStorageSync('registerData');
+    if (registerData){
+      registerData.username = username;
+      registerData.password = password;
+      return that.register_and_bind(registerData)
+    }
+
     wx.showLoading();
-    wx.request({
-      url: app.globalData.subDomain + '/user/bind/login',
-      method: 'POST',
-      header: {
-        'content-type': 'application/x-www-form-urlencoded'
-      },
-      data: postData, // 设置请求的 参数
-      success: (res) => {
-        wx.hideLoading();
-        if (res.data.code != 0) {
-          var title = res.data.code == -2 ? '提示' : '错误';
-          wx.showModal({
-            title: title,
-            content: res.data.msg,
-            showCancel: false
-          })
-          return;
-        }
-        wx.setStorageSync('userid', res.data.data.userid);
+    WXAPI.request('/user/bind/login', true, 'post', postData).then(function (res) {
+      wx.hideLoading();
+      if (res.code == 0) {
+        wx.setStorageSync('userid', res.data.userid);
         wx.navigateBack({});
         wx.showToast({
           title: '绑定成功',
           icon: 'none',
         });
+      } else {
+        var title = res.code == -2 ? '提示' : '错误';
+        wx.showModal({
+          title: title,
+          content: res.msg,
+          showCancel: false
+        })
       }
     })
   }
