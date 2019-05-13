@@ -1,5 +1,6 @@
 // pages/bind-login/index.js
 var app = getApp()
+const WXAPI = require('../../wxapi/main')
 Page({
 
   /**
@@ -90,31 +91,22 @@ Page({
       password: password
     }
 
-    wx.showLoading();
-    wx.request({
-      url: app.globalData.subDomain + '/user/bind/login',
-      method: 'POST',
-      header: {
-        'content-type': 'application/x-www-form-urlencoded'
-      },
-      data: postData, // 设置请求的 参数
-      success: (res) => {
-        wx.hideLoading();
-        if (res.data.code != 0) {
-          var title = res.data.code == -2 ? '提示' : '错误';
-          wx.showModal({
-            title: title,
-            content: res.data.msg,
-            showCancel: false
-          })
-          return;
-        }
-        wx.setStorageSync('userid', res.data.data.userid);
+    //wx.showLoading();
+    WXAPI.request('/user/bind/login', true, 'post', postData).then(function (res) {
+      if (res.code == 0) {
+        wx.setStorageSync('userid', res.data.userid);
         wx.navigateBack({});
         wx.showToast({
           title: '绑定成功',
           icon: 'none',
         });
+      } else {
+        var title = res.code == -2 ? '提示' : '错误';
+        wx.showModal({
+          title: title,
+          content: res.msg,
+          showCancel: false
+        })
       }
     })
   }
