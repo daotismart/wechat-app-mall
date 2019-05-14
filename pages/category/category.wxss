@@ -17,7 +17,7 @@ page {
   width: 200rpx;
   /* min-width: 200rpx; */
   flex-shrink: 0;
-  background-color: #f8f8f8;
+  background-color: #eee;
 }
 
 .right {
@@ -61,6 +61,26 @@ page {
 .goods-description {
   display: flex;
   flex-direction: row;
+}
+
+.goods-title{
+  width: 280rpx;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  font-size: 24rpx;
+  padding: 24rpx 0 0rpx 0;
+  color:#000;
+  margin-left: 24rpx;
+  font-weight: bold;
+}
+
+.goods-price{
+  overflow: hidden;
+  font-size: 24rpx;
+  padding: 24rpx 0;
+  color:#e64340;
+  margin-left: 24rpx;
 }
 
 .goods-pic {

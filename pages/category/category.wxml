@@ -23,13 +23,13 @@
       <block wx:for="{{item.goods}}" wx:for-item="goods" wx:key="id">
         <view class='goods-item'>
 
-<view  class="goods-description" bindtap="toDetailsTap" data-id="{{goods.id}}">
-          <image class='goods-pic' mode='aspectFill' lazy-load="true" src="{{goods.pic}}_m"></image>
+          <view class="goods-description">
+            <image class='goods-pic' mode='aspectFill' lazy-load="true" src="{{goods.pic}}_m" bindtap="toDetailsTap" data-id="{{goods.id}}"></image>
 
-          <view class='goods-info'>
-            <text >{{goods.name}}</text>
-            <text style='color:red;'>￥{{goods.minPrice}}</text>
-          </view>
+            <view class='goods-info'>
+              <view class="goods-title" bindtap="toDetailsTap" data-id="{{goods.id}}">{{goods.name}}</view>
+              <view class="goods-price">￥{{goods.minPrice}}</view>
+            </view>
           </view>
           <view class='add-sub-goods'>
            <addSubGoods goodsId="{{goods.id}}" buyNum="{{goods.buyNum}}" bind:totalPriceChange='onTotalPriceChange'></addSubGoods>
@@ -45,7 +45,7 @@
   <view class="left-price">
     <view class="shop-num">({{shopNum}})</view>
     <image src="/images/cart/totalCart.png" class="cart-btn" bindtap="navigateToCartShop" />
-    <view class="total">¥ {{totalPrice}} + {{totalScore}} 积分</view>
+    <view class="total">￥ {{totalPrice}} + {{totalScore}} 积分</view>
   </view>
   <view class="to-pay-btn" bindtap="navigateToPayOrder">去结算</view>
 </view>
