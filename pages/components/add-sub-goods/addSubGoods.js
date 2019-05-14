@@ -178,12 +178,13 @@ Component({
         goodsId: goodsDetail.basicInfo.id,
         pic: goodsDetail.basicInfo.pic, // 产品图片url
         name: goodsDetail.basicInfo.name,
-        //propertyChildIds:propertyChildIds 产品规格信息
-        //label：propertyChildNames 产品规格名称
+        propertyChildIds: "", //产品规格信息
+        label: "", //产品规格名称
         price: goodsDetail.basicInfo.minPrice, //选择产品规格的价格
         score: goodsDetail.basicInfo.minScore,
-        number: 1,
+        left: "",
         active: true,
+        number: 1,
         logisticsType: goodsDetail.basicInfo.logisticsId,
         logistics: goodsDetail.logistics,
         weight: goodsDetail.basicInfo.weight
