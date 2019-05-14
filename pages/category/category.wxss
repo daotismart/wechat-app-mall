@@ -158,5 +158,10 @@ page {
   left: 94rpx;
   bottom:36rpx;
 }
+.goods-price-line{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
 
 

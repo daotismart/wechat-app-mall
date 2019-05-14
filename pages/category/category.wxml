@@ -28,16 +28,17 @@
 
             <view class='goods-info'>
               <view class="goods-title" bindtap="toDetailsTap" data-id="{{goods.id}}">{{goods.name}}</view>
-              <view class="goods-price">￥{{goods.minPrice}}</view>
+              <view class='goods-price-line'>
+                  <view class="goods-price">￥{{goods.minPrice}}</view>
+                  <addSubGoods goodsId="{{goods.id}}" buyNum="{{goods.buyNum}}" bind:totalPriceChange='onTotalPriceChange'></addSubGoods>
+              </view>
             </view>
-          </view>
-          <view class='add-sub-goods'>
-           <addSubGoods goodsId="{{goods.id}}" buyNum="{{goods.buyNum}}" bind:totalPriceChange='onTotalPriceChange'></addSubGoods>
           </view>
 
         </view>
       </block>
     </block>
+    <view style="height: 50px"></view>
   </scroll-view>
 </view>
 
@@ -45,7 +46,7 @@
   <view class="left-price">
     <view class="shop-num">({{shopNum}})</view>
     <image src="/images/cart/totalCart.png" class="cart-btn" bindtap="navigateToCartShop" />
-    <view class="total">￥ {{totalPrice}} + {{totalScore}} 积分</view>
+    <view class="total">¥ {{totalPrice}} + {{totalScore}} 积分</view>
   </view>
   <view class="to-pay-btn" bindtap="navigateToPayOrder">去结算</view>
 </view>
