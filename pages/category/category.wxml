@@ -21,15 +21,16 @@
       </view>
 
       <block wx:for="{{item.goods}}" wx:for-item="goods" wx:key="id">
-        <view class='goods-item' bindtap="toDetailsTap" data-id="{{goods.id}}">
+        <view class='goods-item'>
 
-          <image class='goods-pic' mode='aspectFill' lazy-load="true" src="{{goods.pic}}_m"></image>
+          <view class="goods-description">
+            <image class='goods-pic' mode='aspectFill' lazy-load="true" src="{{goods.pic}}_m" bindtap="toDetailsTap" data-id="{{goods.id}}"></image>
 
-          <view class='goods-info'>
-            <text >{{goods.name}}</text>
-            <text style='color:red;'>￥{{goods.minPrice}}</text>
+            <view class='goods-info'>
+              <view class="goods-title" bindtap="toDetailsTap" data-id="{{goods.id}}">{{goods.name}}</view>
+              <view class="goods-price">￥{{goods.minPrice}}</view>
+            </view>
           </view>
-
 
         </view>
       </block>
