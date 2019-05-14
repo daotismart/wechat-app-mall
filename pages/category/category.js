@@ -227,6 +227,18 @@ Page({
     }
     return 0;
   },
+  navigateToPayOrder: function () {
+    wx.hideLoading();
+    wx.navigateTo({
+      url: "/pages/to-pay-order/index"
+    })
+  },
+  navigateToCartShop: function () {
+    wx.hideLoading();
+    wx.switchTab({
+      url: "/pages/shop-cart/index"
+    })
+  },
 
   onShow: function () {
     this.onLoad();
