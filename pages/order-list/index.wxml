@@ -19,7 +19,7 @@
                 <view class="goods-des">
                    <view>订单号:{{item.orderNumber}} </view>
                    <view wx:if="{{item.remark && item.remark != ''}}">备注： {{item.remark}}</view>
-                   <view class='order-advance' bindtap="orderDetail" data-id="{{item.id}}" wx:if="{{item.status == 0 }}">订单详情</view>
+                   <view class='order-advance' wx:if="{{item.status == 0 }}">订单详情</view>
                 </view>
             </view>
             <view >
