@@ -68,7 +68,7 @@ Page({
 
     var shopCarInfo = wx.getStorageSync('shopCarInfo');
     var hideSummaryPopup = true;
-    if (shopCarInfo.shopList.length > 0) {
+    if (shopCarInfo.shopList && shopCarInfo.shopList.length > 0) {
       hideSummaryPopup = false;
     }
     that.setData({
@@ -169,7 +169,7 @@ Page({
   },
   getGoodsNumInShopCard: function (goodsId) {
     var shopCarInfo = wx.getStorageSync('shopCarInfo');
-    if (shopCarInfo.shopList.length > 0) {
+    if (shopCarInfo.shopList && shopCarInfo.shopList.length > 0) {
       for (var i = 0; i < shopCarInfo.shopList.length; i++) {
         var tmpShopCarMap = shopCarInfo.shopList[i];
         if (tmpShopCarMap.goodsId == goodsId) {
