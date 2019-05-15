@@ -12,6 +12,7 @@ Page({
     goodsJsonStr: "",
     orderType: "", //订单类型，购物车下单或立即支付下单，默认是购物车，
     pingtuanOpenId: undefined, //拼团的话记录团号
+    expected_date: undefined,
 
     hasNoCoupons: true,
     coupons: [],
@@ -70,13 +71,24 @@ Page({
     var that = this;
     var loginToken = wx.getStorageSync('token') // 用户登录 token
     var remark = ""; // 备注信息
+    var expected_date = "";
     if (e) {
       remark = e.detail.value.remark; // 备注信息
+      expected_date = that.data.expected_date; // 备注信息
+      if (!expected_date) {
+        wx.showModal({
+          title: '提示',
+          content: '请选择送货日期',
+          showCancel: false
+        })
+        return
+      }
     }
 
     var postData = {
       token: loginToken,
       goodsJsonStr: that.data.goodsJsonStr,
+      expected_date: expected_date,
       remark: remark
     };
     if (that.data.kjId) {
@@ -285,6 +297,11 @@ Page({
           });
         }
       }
+    })
+  },
+  bindDateChange: function (e) {
+    this.setData({
+      expected_date: e.detail.value
     })
   },
   bindChangeCoupon: function (e) {
