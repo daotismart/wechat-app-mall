@@ -135,7 +135,7 @@ Page({
             if (referrer_storge) {
               referrer = referrer_storge;
             }
-            if (0) {
+            if (1) {
               var registerData = {
                 code: code,
                 encryptedData: encryptedData,
