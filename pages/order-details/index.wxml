@@ -62,7 +62,7 @@
                 <view class="text-box">
                     <view class="arow arow01">
                         <view class="goods-name">{{item.goodsName}}</view>
-                        <view class="goods-price">¥ {{item.amount}}</view>
+                        <view class="goods-price">¥ {{item.amount}} /{{item.uom_name}}</view>
                     </view>
                     <view class="arow">
                         <view class="goods-label">{{item.property}}</view>
