@@ -4,7 +4,7 @@
 		<text class="userinfo-nickname">{{ userInfo.nickName }}</text>
 	</view>
   <view class="asset">
-    <view class='item' bindtap='goAsset'>
+    <view class='item' bindtap=''>
       <view>{{balance}}</view>
       <view>可用余额</view>
     </view>
@@ -36,9 +36,9 @@
     </view>
   </view>
   <view style="height:10rpx;background: #eee;width:100%;"></view>
-  <view class="my-item">
+  <!--<view class="my-item">
     <navigator url="/pages/asset/index" hover-class="navigator-hover">资金明细</navigator>
-  </view>
+  </view>-->
   <view class="my-item">
     <navigator url="/pages/sign/index" hover-class="navigator-hover">每日签到</navigator>
   </view>
