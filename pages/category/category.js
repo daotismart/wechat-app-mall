@@ -37,6 +37,18 @@ Page({
     let that = this;
     wx.showNavigationBarLoading();
 
+    var shopCarInfo = wx.getStorageSync('shopCarInfo');
+    var hideSummaryPopup = true;
+    if (shopCarInfo.shopList && shopCarInfo.shopList.length > 0) {
+      hideSummaryPopup = false;
+    }
+    that.setData({
+      hideSummaryPopup: hideSummaryPopup,
+      totalPrice: shopCarInfo.totalPrice,
+      totalScore: shopCarInfo.totalScore,
+      shopNum: shopCarInfo.shopNum
+    });
+
     WXAPI.goodsCategory().then(function(res) {
 
       var categories = [];
@@ -98,6 +110,7 @@ Page({
         res.data.forEach((item, i) => {
 
           if (item.categoryId == wrap.id) {
+            item.buyNum = that.getGoodsNumInShopCard(res.data[i].id);
             goods.push(item)
           }
         })
@@ -111,8 +124,6 @@ Page({
         loadingMoreHidden: true,
         goodsWrap: goodsWrap,
       });
-
-      that.refreshTotalPrice();
 
       console.log(goodsWrap);
 
@@ -211,7 +222,18 @@ Page({
     });
 
   },
-  
+  getGoodsNumInShopCard: function (goodsId) {
+    var shopCarInfo = wx.getStorageSync('shopCarInfo');
+    if (shopCarInfo.shopList && shopCarInfo.shopList.length > 0) {
+      for (var i = 0; i < shopCarInfo.shopList.length; i++) {
+        var tmpShopCarMap = shopCarInfo.shopList[i];
+        if (tmpShopCarMap.goodsId == goodsId) {
+          return tmpShopCarMap.number;
+        }
+      }
+    }
+    return 0;
+  },
   navigateToPayOrder: function () {
     wx.hideLoading();
     wx.navigateTo({
@@ -226,36 +248,7 @@ Page({
   },
 
   onShow: function () {
-    this.refreshTotalPrice();
-  },
-
-  refreshTotalPrice: function () {
-    var shopCarInfo = wx.getStorageSync('shopCarInfo');
-    var hideSummaryPopup = true;
-    var goodsWrap = this.data.goodsWrap;
-    if (goodsWrap.length > 0 && shopCarInfo.shopList && shopCarInfo.shopList.length > 0) {
-      hideSummaryPopup = false;
-      for (var j = 0; j < shopCarInfo.shopList.length; j++) {
-        var tmpShopCarMap = shopCarInfo.shopList[j];
-        for (var i = 0; i < goodsWrap.length; i++) {
-          var goods = goodsWrap[i].goods;
-          for (var p = 0; p < goods.length; i++){
-            if (tmpShopCarMap.goodsId === goods[p].id) {
-              goods[p].buyNum = tmpShopCarMap.number;
-              break;
-            }
-          }
-        }
-      }
-
-      this.setData({
-        hideSummaryPopup: hideSummaryPopup,
-        totalPrice: shopCarInfo.totalPrice,
-        totalScore: shopCarInfo.totalScore,
-        shopNum: shopCarInfo.shopNum,
-        goodsWrap: goodsWrap
-      });
-    }
+    this.onLoad();
   },
   askPrice: function () {
     wx.showModal({

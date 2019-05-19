@@ -73,6 +73,18 @@ Page({
       title: wx.getStorageSync('mallName')
     })
 
+    var shopCarInfo = wx.getStorageSync('shopCarInfo');
+    var hideSummaryPopup = true;
+    if (shopCarInfo.shopList && shopCarInfo.shopList.length > 0) {
+      hideSummaryPopup = false;
+    }
+    that.setData({
+      hideSummaryPopup: hideSummaryPopup,
+      totalPrice: shopCarInfo.totalPrice,
+      totalScore: shopCarInfo.totalScore,
+      shopNum: shopCarInfo.shopNum
+    });
+
     /**
      * 示例：
      * 调用接口封装方法
@@ -153,13 +165,13 @@ Page({
         goods = that.data.goods
       }
       for (var i = 0; i < res.data.length; i++) {
+        res.data[i].buyNum = that.getGoodsNumInShopCard(res.data[i].id);
         goods.push(res.data[i]);
       }
       that.setData({
         loadingMoreHidden: true,
         goods: goods,
       });
-      that.refreshTotalPrice();
     })
   },
   getGoodsNumInShopCard: function (goodsId) {
@@ -312,35 +324,8 @@ Page({
   },
 
   onShow: function () {
-    this.refreshTotalPrice();
+    this.onLoad();
   },
-
-  refreshTotalPrice: function(){
-    var shopCarInfo = wx.getStorageSync('shopCarInfo');
-    var hideSummaryPopup = true;
-    var goods = this.data.goods;
-    if (goods.length > 0 && shopCarInfo.shopList && shopCarInfo.shopList.length > 0) {
-      hideSummaryPopup = false;
-      for (var j = 0; j < shopCarInfo.shopList.length; j++) {
-        var tmpShopCarMap = shopCarInfo.shopList[j];
-        for (var i = 0; i < goods.length; i++) {
-          if (tmpShopCarMap.goodsId === goods[i].id) {
-            goods[i].buyNum = tmpShopCarMap.number;
-            break;
-          }
-        }
-      }
-
-      this.setData({
-        hideSummaryPopup: hideSummaryPopup,
-        totalPrice: shopCarInfo.totalPrice,
-        totalScore: shopCarInfo.totalScore,
-        shopNum: shopCarInfo.shopNum,
-        goods: goods
-      });
-    }
-  },
-
   askPrice: function () {
     wx.showModal({
       title: '询价',
@@ -348,7 +333,6 @@ Page({
       showCancel: false
     })
   },
-
   onPullDownRefresh: function() {
     this.setData({
       curPage: 1
