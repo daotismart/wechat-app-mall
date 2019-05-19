@@ -86,7 +86,7 @@ Component({
 
       wx.setStorageSync("shopCarInfo", shopCarInfo);
       var data = {
-        totalPrice: shopCarInfo.totalPrice,
+        totalPrice: parseFloat(shopCarInfo.totalPrice.toFixed(2)),
         totalScore: shopCarInfo.totalScore,
         shopNum: shopCarInfo.shopNum
       };
@@ -115,13 +115,13 @@ Component({
 
       this.setData({
         buyNum: this.data.buyNum + 1,
-        totalPrice: shopCarInfo.totalPrice,
+        totalPrice: parseFloat(shopCarInfo.totalPrice.toFixed(2)),
         totalScore: shopCarInfo.totalScore,
         shopNum: shopCarInfo.shopNum
       });
 
       var data = {
-        totalPrice: shopCarInfo.totalPrice,
+        totalPrice: parseFloat(shopCarInfo.totalPrice.toFixed(2)),
         totalScore: shopCarInfo.totalScore,
         shopNum: shopCarInfo.shopNum
       };
