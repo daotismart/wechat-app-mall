@@ -4,6 +4,7 @@ const CONFIG = require('../../config.js')
 var app = getApp()
 Page({
   data: {
+    hasToken: false,
     indicatorDots: true,
     autoplay: true,
     interval: 3000,
@@ -62,6 +63,12 @@ Page({
   },
   onLoad: function() {
     var that = this
+    let token = wx.getStorageSync('token');
+    if (token) {
+      this.setData({
+        hasToken: true
+      })
+    }
     wx.setNavigationBarTitle({
       title: wx.getStorageSync('mallName')
     })
@@ -307,6 +314,7 @@ Page({
   onShow: function () {
     this.refreshTotalPrice();
   },
+<<<<<<< HEAD
 
   refreshTotalPrice: function(){
     var shopCarInfo = wx.getStorageSync('shopCarInfo');
@@ -334,6 +342,15 @@ Page({
     }
   },
 
+=======
+  askPrice: function () {
+    wx.showModal({
+      title: '询价',
+      content: '咨询价格相关请联系我们 http://www.oejia.net/ 商榷，谢谢！',
+      showCancel: false
+    })
+  },
+>>>>>>> feature1
   onPullDownRefresh: function() {
     this.setData({
       curPage: 1
