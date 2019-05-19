@@ -8,6 +8,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    hasToken: false,
     categories: [],
     goodsWrap: [],
     categorySelected: "",
@@ -22,6 +23,12 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
+    let token = wx.getStorageSync('token');
+    if (token) {
+      this.setData({
+        hasToken: true
+      })
+    }
 
     this.initData();
   },
@@ -242,5 +249,12 @@ Page({
 
   onShow: function () {
     this.onLoad();
+  },
+  askPrice: function () {
+    wx.showModal({
+      title: '询价',
+      content: '咨询价格相关请联系我们 http://www.oejia.net/ 商榷，谢谢！',
+      showCancel: false
+    })
   },
 })

@@ -63,9 +63,10 @@
            </view>
            <view class="goods-title"  bindtap="toDetailsTap" data-id="{{item.id}}" data-hideShopPopup="true">{{item.name}}</view>
            <view style='display:flex;'>
-            <view class="goods-price">¥ {{item.minPrice}} /{{item.uom_name}}</view>
+            <view wx:if="{{hasToken}}" class="goods-price">¥ {{item.minPrice}} /{{item.uom_name}}</view>
+            <view wx:if="{{!hasToken}}" class="goods-price" bindtap="askPrice">￥询价</view>
             <view wx:if="{{item.originalPrice && item.originalPrice > 0}}" class="goods-price" style='color:#aaa;text-decoration:line-through'>¥ {{item.originalPrice}}</view>
-             <addSubGoods goodsId="{{item.id}}" buyNum="{{item.buyNum}}" bind:totalPriceChange='onTotalPriceChange'></addSubGoods>
+             <addSubGoods wx:if="{{hasToken}}" goodsId="{{item.id}}" buyNum="{{item.buyNum}}" bind:totalPriceChange='onTotalPriceChange'></addSubGoods>
         </view>  
         </view>
     </view>

@@ -29,8 +29,9 @@
             <view class='goods-info'>
               <view class="goods-title" bindtap="toDetailsTap" data-id="{{goods.id}}">{{goods.name}}</view>
               <view class='goods-price-line'>
-                  <view class="goods-price">￥{{goods.minPrice}} /{{goods.uom_name}}</view>
-                  <addSubGoods goodsId="{{goods.id}}" buyNum="{{goods.buyNum}}" bind:totalPriceChange='onTotalPriceChange'></addSubGoods>
+                  <view wx:if="{{hasToken}}" class="goods-price">￥{{goods.minPrice}} /{{goods.uom_name}}</view>
+                  <view wx:if="{{!hasToken}}" class="goods-price" bindtap="askPrice">￥询价</view>
+                  <addSubGoods wx:if="{{hasToken}}" goodsId="{{goods.id}}" buyNum="{{goods.buyNum}}" bind:totalPriceChange='onTotalPriceChange'></addSubGoods>
               </view>
             </view>
           </view>

@@ -5,6 +5,7 @@ var WxParse = require('../../wxParse/wxParse.js');
 
 Page({
   data: {
+    hasToken: false,
     autoplay: true,
     interval: 3000,
     duration: 1000,
@@ -35,6 +36,12 @@ Page({
     })
   },
   onLoad: function(e) {
+    let token = wx.getStorageSync('token');
+    if (token) {
+      this.setData({
+        hasToken: true
+      })
+    }
     if (e.inviter_id) {
       wx.setStorage({
         key: 'inviter_id_' + e.id,
@@ -129,6 +136,13 @@ Page({
    * 规格选择弹出框
    */
   bindGuiGeTap: function() {
+    let token = wx.getStorageSync('token');
+    if (!token) {
+      wx.navigateTo({
+        url: "/pages/authorize/index"
+      })
+      return
+    }
     this.setData({
       hideShopPopup: false
     })
@@ -522,5 +536,12 @@ Page({
     wx.navigateTo({
       url: "/pages/to-pay-order/index?orderType=buyNow&pingtuanOpenId=" + pingtuanopenid
     })
-  }
+  },
+  askPrice: function () {
+    wx.showModal({
+      title: '询价',
+      content: '咨询价格相关请联系我们 http://www.oejia.net/ 商榷，谢谢！',
+      showCancel: false
+    })
+  },
 })
