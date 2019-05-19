@@ -42,9 +42,12 @@
         <view class="row-box">
             <view class="row-label">送货日期</view>
             <view class="weui-cell__bd right-text" style='padding-left: 50rpx;'>
-                <picker mode="date" value="{{expected_date}}" bindchange="bindDateChange">
-                    <view class="weui-input">{{expected_date}}</view>
-                </picker>
+                <picker mode="multiSelector" bindchange="bindMultiPickerChange"                                            bindcolumnchange="bindMultiPickerColumnChange" 
+                        value="{{multiIndex}}" range="{{multiArray}}" range-key="{{'des'}}">
+                <view class="weui-input">
+                      {{multiArray[0][multiIndex[0]].des}} {{multiArray[1][multiIndex[1]].des}}:{{multiArray[2][multiIndex[2]].des}}
+                </view>
+  </picker>
             </view>
         </view>
      </view>
