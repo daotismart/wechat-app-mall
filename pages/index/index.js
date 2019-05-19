@@ -314,7 +314,6 @@ Page({
   onShow: function () {
     this.refreshTotalPrice();
   },
-<<<<<<< HEAD
 
   refreshTotalPrice: function(){
     var shopCarInfo = wx.getStorageSync('shopCarInfo');
@@ -342,7 +341,6 @@ Page({
     }
   },
 
-=======
   askPrice: function () {
     wx.showModal({
       title: '询价',
@@ -350,7 +348,7 @@ Page({
       showCancel: false
     })
   },
->>>>>>> feature1
+
   onPullDownRefresh: function() {
     this.setData({
       curPage: 1
