@@ -17,7 +17,9 @@ Page({
     hasNoCoupons: true,
     coupons: [],
     youhuijine: 0, //优惠券金额
-    curCoupon: null // 当前选择使用的优惠券
+    curCoupon: null, // 当前选择使用的优惠券
+    multiIndex: [0, 0, 0],
+    multiArray: []
   },
   onShow: function () {
     var that = this;
@@ -55,6 +57,7 @@ Page({
       _data.pingtuanOpenId = e.pingtuanOpenId
     }
     this.setData(_data);
+    this.buildDateRange();
   },
 
   getDistrictId: function (obj, aaa) {
@@ -318,5 +321,86 @@ Page({
       youhuijine: this.data.coupons[selIndex].money,
       curCoupon: this.data.coupons[selIndex]
     });
+  },
+
+  buildDateRange: function () {
+    var multiArray = [];
+    let dateRangeArray = this.getDateRangeArray(1, 10);
+    multiArray.push(dateRangeArray);
+
+    let hourRange = this.getSubRange(5, 24);
+    multiArray.push(hourRange);
+
+    let minuteRange = [{ des: "00" }, { des: "15" }, { des: "30" }, { des: "45" }];
+    multiArray.push(minuteRange);
+
+    this.setData({
+      multiArray: multiArray
+    });
+
+    this.setSelectedDate(this.data.multiIndex, multiArray);
+  },
+
+  getDateRangeArray: function (start, end) {
+    var dateRangeArray = [];
+    var millonSeconds = 24 * 60 * 60 * 1000;
+    var curDate = new Date();
+    for (var i = start; i <= end; i++) {
+      var date = new Date(curDate.getTime() + 24 * 60 * 60 * 1000 * i);
+      var year = date.getFullYear();
+      var month = date.getMonth() + 1;
+      var day = date.getDate();
+      var value = year + "-" + month + "-" + day;
+      var monthAndDay = month + "月" + day + "日";
+      var dateStr = { des: monthAndDay, value: value};
+      
+      if (i === 0) {
+        dateStr = { des: "今天" + "(" + monthAndDay + ")", value: value };
+      } 
+      if (i === 1) {
+        dateStr = { des: "明天" + "(" + monthAndDay + ")", value: value };
+      } 
+      if (i === 2) {
+        dateStr = { des: "后天" + "(" + monthAndDay + ")", value: value };
+      } 
+     
+      dateRangeArray.push(dateStr);
+    }
+    return dateRangeArray;
+  },
+
+  getSubRange: function (start,end) {
+    let range = [];
+    for (var i = start; i <= end; i++) {
+      var item = i;
+      if (i < 10) {
+        item = "0" + i;
+      }
+      range.push({ des: item });
+    }
+    return range;
+  },
+
+  bindMultiPickerChange: function (e) {
+    var multiIndex = e.detail.value;
+    this.setSelectedDate(multiIndex, this.data.multiArray);
+  },
+
+  setSelectedDate: function (multiIndex, multiArray){
+    var expected_date = multiArray[0][multiIndex[0]].value + " " + multiArray[1][multiIndex[1]].des
+      + ":" + multiArray[2][multiIndex[2]].des + ":00";
+    this.setData({
+      multiIndex: multiIndex,
+      expected_date: expected_date
+    })
+  },
+
+  bindMultiPickerColumnChange: function (e) {
+    var data = {
+      multiArray: this.data.multiArray,
+      multiIndex: this.data.multiIndex
+    };
+    data.multiIndex[e.detail.column] = e.detail.value;
+    this.setData(data);
   }
 })
