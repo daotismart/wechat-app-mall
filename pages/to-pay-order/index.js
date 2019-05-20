@@ -139,14 +139,14 @@ Page({
 
       if (e && "buyNow" != that.data.orderType) {
         // 清空购物车数据
-        wx.removeStorageSync('shopCarInfo');
+        wx.setStorageSync("shopCarInfo", {});
       }
       if (!e) {
         that.setData({
           totalScoreToPay: res.data.score,
           isNeedLogistics: res.data.isNeedLogistics,
           allGoodsPrice: res.data.amountTotle,
-          allGoodsAndYunPrice: res.data.amountLogistics + res.data.amountTotle,
+          allGoodsAndYunPrice: parseFloat((res.data.amountLogistics + res.data.amountTotle).toFixed(2)),
           yunPrice: res.data.amountLogistics
         });
         that.getMyCoupons();
