@@ -83,10 +83,10 @@ Component({
           }
         }
       }
-
+      shopCarInfo.totalPrice = parseFloat(shopCarInfo.totalPrice.toFixed(2));
       wx.setStorageSync("shopCarInfo", shopCarInfo);
       var data = {
-        totalPrice: parseFloat(shopCarInfo.totalPrice.toFixed(2)),
+        totalPrice: shopCarInfo.totalPrice,
         totalScore: shopCarInfo.totalScore,
         shopNum: shopCarInfo.shopNum
       };
@@ -107,6 +107,7 @@ Component({
       shopCarInfo.totalPrice = shopCarInfo.totalPrice + parseFloat(shopGood.price * 1);
       shopCarInfo.totalScore = shopCarInfo.totalScore + shopGood.score * 1;
 
+      shopCarInfo.totalPrice = parseFloat(shopCarInfo.totalPrice.toFixed(2));
       //shopCarInfo.kjId = this.data.kjId;
       wx.setStorage({
         key: 'shopCarInfo',
@@ -115,13 +116,13 @@ Component({
 
       this.setData({
         buyNum: this.data.buyNum + 1,
-        totalPrice: parseFloat(shopCarInfo.totalPrice.toFixed(2)),
+        totalPrice: shopCarInfo.totalPrice,
         totalScore: shopCarInfo.totalScore,
         shopNum: shopCarInfo.shopNum
       });
 
       var data = {
-        totalPrice: parseFloat(shopCarInfo.totalPrice.toFixed(2)),
+        totalPrice: shopCarInfo.totalPrice,
         totalScore: shopCarInfo.totalScore,
         shopNum: shopCarInfo.shopNum
       };
