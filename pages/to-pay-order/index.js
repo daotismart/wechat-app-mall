@@ -327,7 +327,7 @@ Page({
     let dateRangeArray = this.getDateRangeArray(1, 10);
     multiArray.push(dateRangeArray);
 
-    let hourRange = this.getSubRange(5, 24);
+    let hourRange = this.getSubRange(3, 24);
     multiArray.push(hourRange);
 
     let minuteRange = [{ des: "00" }, { des: "15" }, { des: "30" }, { des: "45" }];
