@@ -155,6 +155,10 @@ Component({
     getShopCarInfo: function() {
       var shopCarInfo = wx.getStorageSync('shopCarInfo');
 
+      if (!shopCarInfo || shopCarInfo === ""){
+        shopCarInfo = {};
+      }
+      
       if (!shopCarInfo.shopList) {
         shopCarInfo.shopList = [];
       }
