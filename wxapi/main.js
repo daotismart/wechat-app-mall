@@ -300,5 +300,8 @@ module.exports = {
   },
   rechargeSendRules: () => {
     return request('/user/recharge/send/rule', true, 'get')
+  },
+  createSupplierRecruitment: (data) => {
+    return request('', true, 'post', data)
   }
 }
