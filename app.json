@@ -23,7 +23,7 @@
     "pages/sign/index",
     "pages/fetch-coupon/index",
     "pages/bind-login/index",
-    "pages/category/category"
+    "pages/category/category",
     "pages/supplier-recruitment/index"
   ],
   "window":{
