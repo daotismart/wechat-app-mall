@@ -24,6 +24,7 @@
     "pages/fetch-coupon/index",
     "pages/bind-login/index",
     "pages/category/category"
+    "pages/supplier-recruitment/index"
   ],
   "window":{
     "backgroundTextStyle":"light",
