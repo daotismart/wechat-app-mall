@@ -38,16 +38,14 @@ Page({
     wx.showNavigationBarLoading();
 
     var shopCarInfo = wx.getStorageSync('shopCarInfo');
-    var hideSummaryPopup = true;
     if (shopCarInfo.shopList && shopCarInfo.shopList.length > 0) {
-      hideSummaryPopup = false;
+      that.setData({
+        hideSummaryPopup: false,
+        totalPrice: shopCarInfo.totalPrice,
+        totalScore: shopCarInfo.totalScore,
+        shopNum: shopCarInfo.shopNum
+      });
     }
-    that.setData({
-      hideSummaryPopup: hideSummaryPopup,
-      totalPrice: shopCarInfo.totalPrice,
-      totalScore: shopCarInfo.totalScore,
-      shopNum: shopCarInfo.shopNum
-    });
 
     WXAPI.goodsCategory().then(function(res) {
 
@@ -253,10 +251,8 @@ Page({
   
   refreshTotalPrice: function () {
     var shopCarInfo = wx.getStorageSync('shopCarInfo');
-    var hideSummaryPopup = true;
     var goodsWrap = this.data.goodsWrap;
     if (goodsWrap.length > 0 && shopCarInfo.shopList && shopCarInfo.shopList.length > 0) {
-      hideSummaryPopup = false;
       for (var j = 0; j < shopCarInfo.shopList.length; j++) {
         var tmpShopCarMap = shopCarInfo.shopList[j];
         for (var i = 0; i < goodsWrap.length; i++) {
@@ -271,7 +267,7 @@ Page({
       }
 
       this.setData({
-        hideSummaryPopup: hideSummaryPopup,
+        hideSummaryPopup: false,
         totalPrice: shopCarInfo.totalPrice,
         totalScore: shopCarInfo.totalScore,
         shopNum: shopCarInfo.shopNum,
