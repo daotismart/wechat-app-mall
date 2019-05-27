@@ -38,16 +38,14 @@ Page({
     wx.showNavigationBarLoading();
 
     var shopCarInfo = wx.getStorageSync('shopCarInfo');
-    var hideSummaryPopup = true;
     if (shopCarInfo.shopList && shopCarInfo.shopList.length > 0) {
-      hideSummaryPopup = false;
+      that.setData({
+        hideSummaryPopup: false,
+        totalPrice: shopCarInfo.totalPrice,
+        totalScore: shopCarInfo.totalScore,
+        shopNum: shopCarInfo.shopNum
+      });
     }
-    that.setData({
-      hideSummaryPopup: hideSummaryPopup,
-      totalPrice: shopCarInfo.totalPrice,
-      totalScore: shopCarInfo.totalScore,
-      shopNum: shopCarInfo.shopNum
-    });
 
     WXAPI.goodsCategory().then(function(res) {
 
@@ -248,8 +246,36 @@ Page({
   },
 
   onShow: function () {
-    this.onLoad();
+    this.refreshTotalPrice();
   },
+  
+  refreshTotalPrice: function () {
+    var shopCarInfo = wx.getStorageSync('shopCarInfo');
+    var goodsWrap = this.data.goodsWrap;
+    if (goodsWrap.length > 0 && shopCarInfo.shopList && shopCarInfo.shopList.length > 0) {
+      for (var j = 0; j < shopCarInfo.shopList.length; j++) {
+        var tmpShopCarMap = shopCarInfo.shopList[j];
+        for (var i = 0; i < goodsWrap.length; i++) {
+          var goods = goodsWrap[i].goods;
+          for (var p = 0; p < goods.length; p++) {
+            if (tmpShopCarMap.goodsId === goods[p].id) {
+              goods[p].buyNum = tmpShopCarMap.number;
+              break;
+            }
+          }
+        }
+      }
+
+      this.setData({
+        hideSummaryPopup: false,
+        totalPrice: shopCarInfo.totalPrice,
+        totalScore: shopCarInfo.totalScore,
+        shopNum: shopCarInfo.shopNum,
+        goodsWrap: goodsWrap
+      });
+    }
+  },
+
   askPrice: function () {
     wx.showModal({
       title: '询价',
