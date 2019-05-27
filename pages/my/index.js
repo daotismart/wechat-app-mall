@@ -114,5 +114,10 @@ Page({
     wx.navigateTo({
       url: "/pages/order-list/index?type=" + e.currentTarget.dataset.type
     })
-  }
+  },
+  toSupplierRecruitment: function (e) {
+    wx.navigateTo({
+      url: "/pages/supplier-recruitment/index"
+    })
+  },
 })
