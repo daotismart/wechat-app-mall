@@ -358,6 +358,12 @@ Page({
     })
   },
   onPullDownRefresh: function() {
+    let token = wx.getStorageSync('token');
+    if (token) {
+      this.setData({
+        hasToken: true
+      })
+    }
     this.setData({
       curPage: 1
     });
