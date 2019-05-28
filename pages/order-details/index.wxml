@@ -123,5 +123,9 @@
                 <view class="row-label">应付总额</view>
                 <view class="right-text">¥ {{orderDetail.orderInfo.amountReal}}</view>
             </view>
+            <view class="row-box">
+                <view class="row-label">需求日期</view>
+                <view class="right-text">{{orderDetail.orderInfo.requested_date}}</view>
+            </view>
         </view>
 </view>
