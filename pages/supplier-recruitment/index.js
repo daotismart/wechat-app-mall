@@ -67,40 +67,36 @@ Page({
 
   submitSupplierInfo: function(e) {
     //校验表单
-    const params = e.detail.value
+    var params = e.detail.value
     if (!this.WxValidate.checkForm(params)) {
       const error = this.WxValidate.errorList[0];
       this.showModal(error);
       return false;
     }
-
-    // 开始并行上传图片
-    const promiseList = this.getPromiseList();
-    const result = Promise.all(promiseList).then((res) => {
-
-      return res;
-    }).catch((error) => {
-      console.log(error);
-    });
-
+    params.token = wx.getStorageSync('token');
     this.createSupplierRecruitment(params);
   },
 
   createSupplierRecruitment: function(data) {
+    var that = this;
     WXAPI.createSupplierRecruitment(data).then(function(res) {
       if (res.code != 0) {
         var title = res.code == -2 ? '提示' : '错误';
         wx.showModal({
           title: title,
           showCancel: false,
-          success(res) {
-            if (res.confirm) {
-              wx.navigateBack({});
-            }
-          }
         })
         return;
       } else {
+        // 开始并行上传图片
+        const promiseList = that.getPromiseList(res.data);
+        const result = Promise.all(promiseList).then((res) => {
+
+          return res;
+        }).catch((error) => {
+          console.log(error);
+        });
+
         wx.showModal({
           title: "提交成功",
           showCancel: false,
@@ -114,17 +110,17 @@ Page({
     })
   },
 
-  getPromiseList: function(error) {
+  getPromiseList: function (postID) {
     // 将选择的图片组成一个Promise数组，准备进行并行上传
     var images = this.data.sampleImages.concat(this.data.cardImages);
     const promiseList = images.map(path => {
       return new Promise(resolve => {
         wx.uploadFile({
-          url: '',
+          url: WXAPI.URL_PRE + '/supplier/upload?token=' + wx.getStorageSync('token') + '&id='+ postID,
           filePath: path,
           name: 'images',
           success: (res) => {
-            const data = JSON.parse(res.data).responseData.imageUrls[0];
+            const data = res.data;
             resolve(data);
           }
         });
