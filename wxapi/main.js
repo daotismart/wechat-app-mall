@@ -1,7 +1,7 @@
 // 小程序开发api接口工具包，https://github.com/gooking/wxapi
 const CONFIG = require('./config.js')
 const API_BASE_URL = 'https://sale.calluu.cn'
-
+const URL_PRE = API_BASE_URL + '/' + CONFIG.subDomain;
 
 const request = (url, needSubDomain, method, data) => {
   let _url = API_BASE_URL + (needSubDomain ? '/' + CONFIG.subDomain : '') + url
@@ -51,6 +51,7 @@ Promise.prototype.finally = function (callback) {
 
 module.exports = {
   request,
+  URL_PRE,
   queryMobileLocation: (data) => {
     return request('/common/mobile-segment/location', false, 'get', data)
   },
@@ -302,6 +303,6 @@ module.exports = {
     return request('/user/recharge/send/rule', true, 'get')
   },
   createSupplierRecruitment: (data) => {
-    return request('', true, 'post', data)
+    return request('/supplier/post', true, 'post', data)
   }
 }
