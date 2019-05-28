@@ -13,6 +13,7 @@
         <view class="a-order" wx:for-items="{{orderList}}" wx:key="{{index}}">
             <view class="order-date">
                 <view class="date-box">下单时间：{{item.dateAdd}}</view>
+                <view class="status">{{item.state}}</view>
                 <view class="status {{(item.status==-1 || item.status==4) ? '':'red'}}">{{item.statusStr}}</view>
             </view>
             <view class="goods-info" bindtap="orderDetail" data-id="{{item.id}}">
