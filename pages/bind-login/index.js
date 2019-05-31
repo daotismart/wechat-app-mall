@@ -106,6 +106,7 @@ Page({
               }
               wx.setStorageSync('token', res.data.token)
               wx.setStorageSync('uid', res.data.uid)
+              wx.setStorageSync('userid', res.data.info.base.userid)
               // 回到原来的地方放
               app.navigateToLogin = false
               wx.navigateBack({ delta: 2 });

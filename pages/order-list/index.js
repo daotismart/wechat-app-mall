@@ -32,6 +32,12 @@ Page({
           WXAPI.orderClose(orderId, wx.getStorageSync('token')).then(function(res) {
             if (res.code == 0) {
               that.onShow();
+            }else{
+              wx.showModal({
+                title: '提示',
+                content: res.msg,
+                showCancel: false
+              })
             }
           })
         }
