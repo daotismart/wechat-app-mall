@@ -160,8 +160,14 @@ Page({
       selCityIndex:0,
       selDistrict:'请选择',
       selDistrictIndex: 0
-    })
-    this.initCityData(2, selIterm)
+    });
+    this.initCityData(2, selIterm);
+    if (this.data.selProvince == '上海市' || this.data.selProvince == '北京市' || this.data.selProvince == '天津市' || this.data.selProvince == '重庆市')
+    {
+      this.setData({
+        selDistrict: ''
+      })
+    };
   },
   bindPickerCityChange:function (event) {
     var selIterm = commonCityData.cityData[this.data.selProvinceIndex].cityList[event.detail.value];
@@ -170,8 +176,13 @@ Page({
       selCityIndex:event.detail.value,
       selDistrict: '请选择',
       selDistrictIndex: 0
-    })
-    this.initCityData(3, selIterm)
+    });
+    this.initCityData(3, selIterm);
+    if (this.data.selProvince == '上海市' || this.data.selProvince == '北京市' || this.data.selProvince == '天津市' || this.data.selProvince == '重庆市') {
+      this.setData({
+        selDistrict: ''
+      })
+    };
   },
   bindPickerChange:function (event) {
     var selIterm = commonCityData.cityData[this.data.selProvinceIndex].cityList[this.data.selCityIndex].districtList[event.detail.value];
@@ -261,16 +272,30 @@ Page({
             let eventJ = { detail: { value:i }};
             that.bindPickerProvinceChange(eventJ);
             that.data.selProvinceIndex = i;
-            for (var j = 0; j < commonCityData.cityData[i].cityList.length; j++) {
-              if (cityName == commonCityData.cityData[i].cityList[j].name) {
-                //that.data.selCityIndex = j;
-                eventJ = { detail: { value: j } };
-                that.bindPickerCityChange(eventJ);
-                for (var k = 0; k < commonCityData.cityData[i].cityList[j].districtList.length; k++) {
-                  if (diatrictName == commonCityData.cityData[i].cityList[j].districtList[k].name) {
-                    //that.data.selDistrictIndex = k;
-                    eventJ = { detail: { value: k } };
-                    that.bindPickerChange(eventJ);
+            if (provinceName == '上海市' || provinceName == '北京市' || provinceName == '天津市' || provinceName == '重庆市')
+            {
+              let cityName = res.countyName;
+              for (var j = 0; j < commonCityData.cityData[i].cityList.length; j++) {
+                if (cityName == commonCityData.cityData[i].cityList[j].name) {
+                  //that.data.selCityIndex = j;
+                  eventJ = { detail: { value: j } };
+                  that.bindPickerCityChange(eventJ);
+                }
+              }
+            }
+            else
+            {
+              for (var j = 0; j < commonCityData.cityData[i].cityList.length; j++) {
+                if (cityName == commonCityData.cityData[i].cityList[j].name) {
+                  //that.data.selCityIndex = j;
+                  eventJ = { detail: { value: j } };
+                  that.bindPickerCityChange(eventJ);
+                  for (var k = 0; k < commonCityData.cityData[i].cityList[j].districtList.length; k++) {
+                    if (diatrictName == commonCityData.cityData[i].cityList[j].districtList[k].name) {
+                      //that.data.selDistrictIndex = k;
+                      eventJ = { detail: { value: k } };
+                      that.bindPickerChange(eventJ);
+                    }
                   }
                 }
               }

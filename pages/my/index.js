@@ -28,7 +28,7 @@ Page({
   aboutUs : function () {
     wx.showModal({
       title: '关于我们',
-      content: '本系统基于开源小程序商城系统 https://github.com/EastWorld/wechat-app-mall 搭建，祝大家使用愉快！',
+      content: '欢迎使用为你生活体验馆，智慧科技，引领生活！',
       showCancel:false
     })
   },
